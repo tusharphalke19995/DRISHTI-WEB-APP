@@ -1,0 +1,63 @@
+.sidebarContainer {
+    width: 190px;
+    border-right: 1px solid var(--border-color);
+}
+
+.logoContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding: 6px;
+}
+
+.logoTitle {
+    font-size: 16px;
+    font-weight: var(--font-weight-500);
+    margin: 2px;
+    color: mediumvioletred;
+}
+
+.hamburgerIcon{
+    margin-top: 2px;
+    margin-left: 1px;
+   }
+   
+
+.listItemText:global(.MuiListItemText-primary) {
+    font-size: 13px;
+    font-weight: var(--font-weight-500);
+    color: var(--secondary);
+}
+
+.activeListItemText:global(.MuiListItemText-primary) {
+    color: var(--black);
+}
+
+.customListItemButtonActive:global(.MuiListItemButton-root) {
+    background: var(--primary-extra-light);
+    border-radius: 6px;
+    margin: 0px 4px;
+    border-left: 3px solid var(--primary);
+
+    &:hover {
+        background: var(--primary-extra-light) !important;
+    }
+}
+
+.customListItemButton:global(.MuiListItemButton-root) {
+    margin: 0px 4px;
+    &:hover {
+        background: transparent;
+    }
+}
+.customItem:global(.MuiListItem-root){
+    margin-bottom: 10px;
+}
+
+.listItemText {
+    font-size: 14px;  /* Update with the desired font size */
+  }
+.nested {
+    padding-left: 32px;
+  }

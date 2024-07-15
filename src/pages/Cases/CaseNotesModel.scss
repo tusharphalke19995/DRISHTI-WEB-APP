@@ -1,0 +1,86 @@
+
+:root {
+    --padding: 16px;
+    --bg-color: #fff;
+    --max-width: 500px;
+    --min-width: 90%;
+    --border-radius: 8px;
+    --color-primary: #0F3B8C;
+    --color-text: #0A0A0A;
+    --color-text-muted: #555555;
+  }
+  
+  .modal-box {
+    position: absolute;
+    width: var(--min-width);
+    max-width: var(--max-width);
+    background-color: var(--bg-color);
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+    outline: none;
+  
+    @media (min-width: 600px) {
+      width: 400px;
+    }
+  }
+  
+  .case-notes-container-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--padding);
+  }
+  
+  .case-notes-container-bottom {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--padding);
+  }
+  
+  .info-and-type-container {
+    margin-top: var(--padding);
+  }
+  
+  .info-container {
+    margin-bottom: var(--padding);
+    
+    .info-text {
+      margin-left: 8px;
+      color: var(--color-text);
+    }
+  
+    .MuiTypography-body2 {
+      color: var(--color-text-muted);
+    }
+  }
+  
+  .view-element-list-text {
+    cursor: pointer;
+    color: var(--color-text);
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .modal-box {
+      width: 95%;
+      max-width: 100%;
+      padding: 12px;
+    }
+  
+    .view-element-list-text {
+      font-size: 14px;
+    }
+  
+    button {
+      font-size: 14px;
+      margin-top: 8px;
+    }
+  }
+  
