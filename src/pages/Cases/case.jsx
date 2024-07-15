@@ -119,13 +119,10 @@ const Case = () => {
     };
 
     return (
+        
         <AlertsContext.Provider value={{ alertInfo, setAlertInfo }}>
-            {/* <CaseNotesContext.Provider value={caseNotes}> */}
-                {/* <AlertMessage
-                    alertInfo={alertInfo}
-                    handleClose={() => setAlertInfo({ ...alertInfo, open: false })}
-                /> */}
-                <div className="p-4">
+                
+                <div className="mx-9">
                     <Divider />
                     <div className="flex justify-between items-center my-4">
                         <Typography variant="subtitle2">Home / Cases / P1234567</Typography>

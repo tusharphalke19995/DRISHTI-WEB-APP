@@ -7,6 +7,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  useMediaQuery,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -19,6 +20,7 @@ import RamenDiningIcon from "@mui/icons-material/RamenDining";
 import classNames from "classnames";
 
 import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
+import { useTheme } from "@emotion/react";
 const listButtonStyle = {
   minWidth: "26px",
   svg: {
@@ -27,8 +29,11 @@ const listButtonStyle = {
   },
 };
 
-const Sidebar = () => {
+const Sidebar = (handleSidebarOpen) => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const smScreen = useMediaQuery(theme.breakpoints.down("md"));
+
   const { pathname } = useLocation();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isRoomOpen, setIsRoomOpen] = useState(false);
@@ -78,18 +83,24 @@ const Sidebar = () => {
 
   return (
     <div
-      className={
-        isSidebarOpen ? classes.sidebarContainerOpen : classes.sidebarContainer
-      }
+      className={classNames({
+        [classes.sidebarContainer]: true,
+        [classes.smSidebarStyle]: smScreen,
+      })}
     >
       <div className={classes.logoContainer}>
         <img src={Logo} width={40} alt="" />
         <span className={classes.logoTitle}>An initiaive by Govt. of India</span>
-        <div className={classes.hamburgerIcon} onClick={toggleSidebar}>
+        {/* <div className={classes.hamburgerIcon} onClick={toggleSidebar}>
           {isSidebarOpen ? <CloseIcon /> : <MenuIcon />}
-        </div>
+        </div> */}
       </div>
       <div>
+        {smScreen && (
+          <Box className={classes.backIconContainer}>
+            <ArrowBackIcon onClick={handleSidebarOpen} />
+          </Box>
+        )}
         <List sx={{ paddingTop: "12px" }}>
           <ListItem disablePadding className={classes.customItem}>
             <ListItemButton
