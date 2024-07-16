@@ -1,0 +1,80 @@
+/* Base styles and reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial, sans-serif';
+    background-color: #f0f0f0;
+  }
+  
+  /* Wrapper for the tabs section */
+  .case-tabs-wrapper {
+    width: 100%;
+  
+    .tabs-header {
+      border-bottom: 1px solid #e0e0e0;
+      overflow-x: auto;
+    }
+  
+    .custom-tabs {
+      color: #1976d2;
+      &.Mui-selected {
+        font-weight: bold;
+        color: #0d47a1;
+      }
+    }
+  }
+  
+  /* General content container for tab panels */
+  .tab-content {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    margin-top: 16px;
+  }
+  
+  /* Chip styles: to make Affidavit a chip */
+  .chip {
+    margin-bottom: 8px;
+    background-color: #e3f2fd;
+    font-weight: 600;
+  }
+  
+  /* Ensures the card maintains a good layout across all devices */
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Align icon and content */
+  .card-content-wrapper {
+    display: flex;
+    align-items: center;
+  
+    .MuiIconButton-root {
+      padding: 4px;
+    }
+  
+    .content {
+      margin-left: 8px;
+    }
+  }
+  
+  /* Button in tab content */
+  .add-note {
+    background-color: #0d47a1;
+    color: #fff;
+    text-transform: none;
+  
+    &:hover {
+      background-color: #0c43a0;
+    }
+  }
+  

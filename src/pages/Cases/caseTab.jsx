@@ -1,12 +1,8 @@
-import React, { memo, useContext, useState } from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import React, { memo, useState } from 'react';
+import { Tabs, Tab, Box, Button, Card, CardContent, Typography, Grid, Chip, IconButton } from '@mui/material';
+import { SkipPrevious as SkipPreviousIcon, SkipNext as SkipNextIcon, PlayArrow as PlayArrowIcon } from '@mui/icons-material';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
-
-// import './CaseTab.css'; // Assuming you have a separate stylesheet for custom styles
-// import { CaseNotesContext } from './case';
+import './castab.scss';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -15,36 +11,39 @@ function CustomTabPanel(props) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box className="tab-content">{children}</Box>}
     </div>
   );
 }
 
 function a11yProps(index) {
   return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    id: `tab-${index}`,
+    'aria-controls': `tabpanel-${index}`,
   };
 }
 
 const CaseTab = memo(function CaseTab() {
-// const caseNotes = useContext(CaseNotesContext) || []; // Ensure caseNotes has a default value
-
-  const [value, setValue] = useState(3);
-  const [showCaseNoteAll, setShowCaseNoteAll] = useState(false);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+    <Box className="case-tabs-wrapper">
+      <Box className="tabs-header">
+        <Tabs
+          value={value} 
+          onChange={handleChange} 
+          aria-label="case tabs" 
+          variant="scrollable" 
+          scrollButtons="auto"
+        >
           <Tab className="custom-tabs" label="Overview" {...a11yProps(0)} />
           <Tab className="custom-tabs" label="Case File" {...a11yProps(1)} />
           <Tab className="custom-tabs" label="Hearings" {...a11yProps(2)} />
@@ -52,169 +51,58 @@ const CaseTab = memo(function CaseTab() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <div className="grid grid-cols-12 border-gray-200 p-4">
-          <div className="col-span-12 lg:col-span-6">
-            <h6 className="text-2xl font-medium">Case File</h6>
-          </div>
-          <div className="col-span-12 lg:col-span-6 text-right">
-            <Button variant="contained" className="add-note">
-              View All
-            </Button>
-          </div>
-
-          {[1, 2, 3].map((item) => (
-            <div key={item} className="col-span-12 lg:col-span-4 mx-4 my-5">
-              <div className="card p-4 border border-gray-300 rounded-lg shadow-md bg-custom-blue">
-                <div className="flex justify-between">
-                  <div className="chips">
-                    <p className="p-content text-lg font-semibold">Affidavit</p>
-                  </div>
-                  <div className="chips">
-                    <ArrowOutwardIcon className="action-icon text-gray-500" />
-                  </div>
-                </div>
-                <div className="row mt-4">
-                  <div className="flex flex-col my-2">
-                    <strong className="text-sm font-semibold">Proof of Response to Demand Notice</strong>
-                  </div>
-                  <div className="flex flex-col my-2">
-                    <span className="card-key">Submitted By:</span>
-                    <p className="card-value">Deewakar on behalf of Subarna</p>
-                  </div>
-                  <div className="flex flex-col my-2">
-                    <span className="card-key">Date:</span>
-                    <p className="card-value">23 March 2024</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <TabContent title="Overview" items={[1, 2, 3]} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <div className="grid grid-cols-12 border-gray-200 p-4">
-          <div className="col-span-12 lg:col-span-6">
-            <h6 className="text-2xl font-medium">Case File</h6>
-          </div>
-          <div className="col-span-12 lg:col-span-6 text-right">
-            <Button variant="contained" className="add-note">
-              View All
-            </Button>
-          </div>
-
-          {[1, 2].map((item) => (
-            <div key={item} className="col-span-12 lg:col-span-4 mx-4 my-5">
-              <div className="card p-4 border border-gray-300 rounded-lg shadow-md bg-custom-blue">
-                <div className="flex justify-between">
-                  <div className="chips">
-                    <p className="p-content text-lg font-semibold">Affidavit</p>
-                  </div>
-                  <div className="chips">
-                    <ArrowOutwardIcon className="action-icon text-gray-500" />
-                  </div>
-                </div>
-                <div className="row mt-4">
-                  <div className="flex flex-col my-2">
-                    <strong className="text-sm font-semibold">Proof of Response to Demand Notice</strong>
-                  </div>
-                  <div className="flex flex-col my-2">
-                    <span className="card-key">Submitted By:</span>
-                    <p className="card-value">Deewakar on behalf of Subarna</p>
-                  </div>
-                  <div className="flex flex-col my-2">
-                    <span className="card-key">Date:</span>
-                    <p className="card-value">23 March 2024</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <TabContent title="Case File" items={[1, 2]} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <div className="grid grid-cols-12 border-gray-200 p-4">
-          <div className="col-span-12 lg:col-span-6">
-            <h6 className="text-2xl font-medium">Hearings To Review(6)</h6>
-          </div>
-          <div className="col-span-12 lg:col-span-6 text-right">
-            <Button variant="contained" className="add-note">
-              View All
-            </Button>
-          </div>
-
-          {[1, 2, 3].map((item) => (
-            <div key={item} className="col-span-12 lg:col-span-4 mx-4 my-5">
-              <div className="card p-4 border border-gray-300 rounded-lg shadow-md bg-custom-blue">
-                <div className="flex justify-between">
-                  <div className="chips">
-                    <p className="p-content text-lg font-semibold">Affidavit</p>
-                  </div>
-                  <div className="chips">
-                    <ArrowOutwardIcon className="action-icon text-gray-500" />
-                  </div>
-                </div>
-                <div className="row mt-4">
-                  <div className="flex flex-col my-2">
-                    <strong className="text-sm font-semibold">Proof of Response to Demand Notice</strong>
-                  </div>
-                  <div className="flex flex-col my-2">
-                    <span className="card-key">Submitted By:</span>
-                    <p className="card-value">Deewakar on behalf of Subarna</p>
-                  </div>
-                  <div className="flex flex-col my-2">
-                    <span className="card-key">Date:</span>
-                    <p className="card-value">23 March 2024</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <TabContent title="Hearings To Review(6)" items={[1, 2, 3]} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
-        <div className="grid grid-cols-12 border-gray-200 p-4">
-          {/* <div className={"col-span-12 " + (caseNotes && caseNotes.length <= 3 ? "lg:col-span-12" : "lg:col-span-6")}>
-            <h6 className="text-2xl font-medium">Submissions To Review ({caseNotes.length || 0})</h6>
-          </div> */}
-          {/* { caseNotes && caseNotes.length > 3 && 
-            <div className={"col-span-12 lg:col-span-6 text-right"}>
-              <Button variant="contained" className="add-note" onClick={() => setShowCaseNoteAll(!showCaseNoteAll)}>
-                  { showCaseNoteAll ? "Hide" : "View All" }
-              </Button>
-            </div>
-          } */}
-
-          {/* {caseNotes && caseNotes.slice(0, showCaseNoteAll ? caseNotes.length : 3).map((item) => (
-            <div key={item.id} className="col-span-12 lg:col-span-4 mx-4 my-5">
-              <div className="card p-4 border border-gray-300 rounded-lg shadow-md bg-custom-blue">
-                <div className="flex justify-between">
-                  <div className="chips">
-                    <p className="bg-color p-content text-lg font-semibold">Affidavit</p>
-                  </div>
-                  <div className="chips">
-                    <ArrowOutwardIcon className="action-icon text-gray-500" />
-                  </div>
-                </div>
-                <div className="row mt-4">
-                  <div className="flex flex-col my-2">
-                    <strong className="text-sm font-semibold">Proof of Response to Demand Notice</strong>
-                  </div>
-                  <div className="flex flex-col my-2">
-                    <span className="card-key">Submitted By:</span>
-                    <p className="card-value">{item.submittedBy}</p>
-                  </div>
-                  <div className="flex flex-col my-2">
-                    <span className="card-key">Date:</span>
-                    <p className="card-value">{item.createdAt.toDateString()}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))} */}
-        </div>
+        <TabContent title="Submissions To Review" items={[1, 2, 3, 4]} />
       </CustomTabPanel>
     </Box>
   );
-})
+});
+
+const TabContent = ({ title, items }) => (
+  <Box sx={{ padding: 2 }}>
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={12}>
+        <Typography variant="h6" sx={{ fontWeight: 'medium' }}>{title}</Typography>
+      </Grid>
+      
+
+      {items.map((item) => (
+        <Grid item xs={12} sm={6} md={4} key={item}>
+          <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 0 auto', justifyContent: 'space-between' }}>
+            
+              <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
+              
+                <Box sx={{ ml: 1, flex: 1 }}>
+                  <Chip label="Affidavit" className="chip" />
+                  <IconButton sx={{  float:'right' }}>
+                  <ArrowOutwardIcon />
+                </IconButton>
+                  <Typography variant="subtitle1" color="text.secondary">
+                    Proof of Response to Demand Notice
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    <strong>Submitted By:</strong> Diwakar on behalf of Aparna
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    <strong>Date:</strong> 23 March 2024
+                  </Typography>
+                </Box>
+              </CardContent>
+            </Box>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
+  </Box>
+);
 
 export default CaseTab;

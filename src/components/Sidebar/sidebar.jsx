@@ -163,19 +163,7 @@ const Sidebar = (handleSidebarOpen) => {
          
          
       
-          <ListItem disablePadding className={classes.customItem}>
-            <ListItemButton onClick={handleLogout}>
-              <ListItemIcon sx={listButtonStyle}>
-                <LogoutIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={"Logout"}
-                classes={{
-                  primary: classes.listItemText,
-                }}
-              />
-            </ListItemButton>
-          </ListItem>
+         
         </List>
       </div>
     </div>

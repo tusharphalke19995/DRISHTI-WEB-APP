@@ -9,7 +9,6 @@ import {
     Grid,
     IconButton,
 } from '@mui/material';
-// import { v4 as uuidv4 } from 'uuid';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import EditIcon from '@mui/icons-material/Edit';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
@@ -23,19 +22,15 @@ import CaseTab from '../Cases/caseTab';
 import CaseNotesModel from './CaseNotesModel.jsx';
 import CaseNotesElementListModel from './CaseNotesList';
 
-// import AlertMessage from '../../commons/AlertMessage';
-
-// import { AlertInfo, CaseNotesDataType } from '../../../types/data-types';
 import './case.scss';
 
 // Contexts
 const AlertsContext = createContext({ alertInfo: { open: false }, setAlertInfo: () => {} });
-// const CaseNotesContext = createContext([]);
 
 // Custom Hook to use alert messages
 const useAlertMessages = () => useContext(AlertsContext);
 
-// Styled Menu
+// Styled Menu Component
 const StyledMenu = styled((props) => (
     <Menu
         elevation={0}
@@ -89,10 +84,10 @@ const Case = () => {
     const submitCaseNote = (notes) => {
         if (notes) {
             const newNote = {
-                id: uuidv4(),
+                id: uuidv4(),  // Ensure this import if needed
                 notes,
                 createdAt: new Date(),
-                submittedBy: "Satish on behalf of Judge",
+                submittedBy: "User on behalf of Judge",
                 constituents: constituteItemsChecked,
             };
             setCaseNotes([...caseNotes, newNote]);
@@ -103,11 +98,11 @@ const Case = () => {
                 open: true,
             });
         } else {
-            // setAlertInfo({
-            //     message: AlertMessages.caseNotesRequired.message,
-            //     severity: AlertMessages.caseNotesRequired.severity,
-            //     open: true,
-            // });
+            setAlertInfo({
+                message: "Case notes are required.",
+                severity: "error",
+                open: true,
+            });
         }
     };
 
@@ -119,91 +114,84 @@ const Case = () => {
     };
 
     return (
-        
         <AlertsContext.Provider value={{ alertInfo, setAlertInfo }}>
-                
-                <div className="mx-9">
-                    <Divider />
-                    <div className="flex justify-between items-center my-4">
-                        <Typography variant="subtitle2">Home / Cases / P1234567</Typography>
-                    </div>
-                    <Divider />
-                    <Grid container spacing={1} my={1}>
-                        <Grid item xs={12} lg={9}>
-                            <div className="flex flex-col lg:flex-row items-center">
-                                <Typography variant="h5" className="font-medium">Aparna VS Subarna</Typography>
-                                <span className="text-gray-600 mx-2">| NIA138</span>
-                                <span className="text-gray-600 mx-2">| Summons</span>
-                            </div>
-                        </Grid>
-                        <Grid item xs={12} lg={3}>
-                            <div className="flex flex-wrap justify-end items-center space-x-2">
-                                <Button
-                                    onClick={() => {
-                                        setIsCaseNoteOpen(true);
-                                        setConstituteItemsChecked([]);
-                                    }}
-                                    variant="contained"
-                                    startIcon={<EditNoteIcon />}
-                                    className="mb-2 lg:mb-0"
-                                >
-                                    Add Note
-                                </Button>
-                                <Button
-                                    id="take-action-button"
-                                    aria-controls={open ? 'demo-customized-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={open ? 'true' : undefined}
-                                    variant="contained"
-                                    disableElevation
-                                    onClick={handleMenuClick}
-                                    endIcon={<KeyboardArrowDownIcon />}
-                                >
-                                    Take Action
-                                </Button>
-                                <StyledMenu
-                                    id="demo-customized-menu"
-                                    MenuListProps={{ 'aria-labelledby': 'demo-customized-button' }}
-                                    anchorEl={anchorEl}
-                                    open={open}
-                                    onClose={handleMenuClose}
-                                >
-                                    <MenuItem onClick={handleMenuClose} disableRipple>
-                                        <EditIcon />
-                                        Edit
-                                    </MenuItem>
-                                    <MenuItem onClick={handleMenuClose} disableRipple>
-                                        <FileCopyIcon />
-                                        Duplicate
-                                    </MenuItem>
-                                    <Divider sx={{ my: 0.5 }} />
-                                    <MenuItem onClick={handleMenuClose} disableRipple>
-                                        <ArchiveIcon />
-                                        Archive
-                                    </MenuItem>
-                                    <MenuItem onClick={handleMenuClose} disableRipple>
-                                        <MoreHorizIcon />
-                                        More
-                                    </MenuItem>
-                                </StyledMenu>
-                            </div>
-                        </Grid>
+            <Box className="custom-container">
+                <Box className="header-box">
+                    <Typography variant="subtitle2">Home / Cases / P1234567</Typography>
+                </Box>
+                <Divider />
+                <Grid container spacing={2} my={1}>
+                    <Grid item xs={12} lg={9}>
+                        <Box className="case-title-box">
+                            <Typography variant="h5" className="case-title">Aparna VS Subarna</Typography>
+                            <Typography variant="body2" className="case-id">| NIA138</Typography>
+                            <Typography variant="body2" className="case-status">| Summons</Typography>
+                        </Box>
                     </Grid>
-                    <CaseNotesModel
-                        open={isCaseNoteOpen}
-                        handleClose={() => setIsCaseNoteOpen(false)}
-                        handleSubmit={submitCaseNote}
-                        handleElementList={() => setIsElementListOpen(true)}
-                    />
-                    <CaseNotesElementListModel
-                        open={isElementListOpen}
-                        title="Constituent Elements for NIA138 Cases"
-                        handleElementItemCheck={handleElementItemCheck}
-                        handleClose={() => setIsElementListOpen(false)}
-                    />
-                    <CaseTab />
-                </div>
-            {/* </CaseNotesContext.Provider> */}
+                    <Grid item xs={12} lg={3}>
+                        <Box className="action-buttons-box">
+                            <Button
+                                onClick={() => {
+                                    setIsCaseNoteOpen(true);
+                                    setConstituteItemsChecked([]);
+                                }}
+                                variant="contained"
+                                startIcon={<EditNoteIcon />}
+                                className="action-button"
+                            >
+                                Add Note
+                            </Button>
+                            <Button
+                                onClick={handleMenuClick}
+                                variant="contained"
+                                endIcon={<KeyboardArrowDownIcon />}
+                                className="action-button"
+                            >
+                                Take Action
+                            </Button>
+                            
+                            <StyledMenu
+                                id="customized-menu"
+                                MenuListProps={{ 'aria-labelledby': 'customized-button' }}
+                                anchorEl={anchorEl}
+                                open={open}
+                                onClose={handleMenuClose}
+                            >
+                                <MenuItem onClick={handleMenuClose} disableRipple>
+                                    <EditIcon />
+                                    Edit
+                                </MenuItem>
+                                <MenuItem onClick={handleMenuClose} disableRipple>
+                                    <FileCopyIcon />
+                                    Duplicate
+                                </MenuItem>
+                                <Divider sx={{ my: 0.5 }} />
+                                <MenuItem onClick={handleMenuClose} disableRipple>
+                                    <ArchiveIcon />
+                                    Archive
+                                </MenuItem>
+                                <MenuItem onClick={handleMenuClose} disableRipple>
+                                    <MoreHorizIcon />
+                                    More
+                                </MenuItem>
+                            </StyledMenu>
+                        </Box>
+                    </Grid>
+                </Grid>
+                <CaseNotesModel
+                    open={isCaseNoteOpen}
+                    handleClose={() => setIsCaseNoteOpen(false)}
+                    handleSubmit={submitCaseNote}
+                    handleElementList={() => setIsElementListOpen(true)}
+                />
+                <CaseNotesElementListModel
+                    open={isElementListOpen}
+                    title="Constituent Elements for NIA138 Cases"
+                    handleElementItemCheck={handleElementItemCheck}
+                    handleClose={() => setIsElementListOpen(false)}
+                />
+                <CaseTab />
+            </Box>
         </AlertsContext.Provider>
     );
 };

@@ -26,7 +26,8 @@ const Header = ({ handleSidebarOpen = () => {} }) => {
  
 
   const handleAvatarClick = (event) => {
-    setAvatarAnchorEl(event.currentTarget);
+   
+    navigate("/");
   };
 
 

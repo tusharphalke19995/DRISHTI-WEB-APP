@@ -8,26 +8,29 @@ import {
   ListItem,
   ListItemIcon,
   Typography,
-  Checkbox
+  Checkbox,
+  styled as muiStyled
 } from '@mui/material';
+import { Close, Check as CheckIcon } from '@mui/icons-material';
+// Assuming these styled components exist and are correctly configured:
 import { 
   CaseNotesContainerTop, 
   CaseNotesContainerBottom, 
   ListItemText,
   ListContainer,
   Title 
-} from './style'; // Ensure this path and file exist
-import { Close } from '@mui/icons-material';
-import CheckIcon from '@mui/icons-material/Check';
-// import { CONSTITUTION_ELEMENT_CASE_DATA } from '../../utils/samples'; // Ensure this path and file exist
-import './CaseNotesList.scss'; // Ensure this path and file exist
+} from './style'; 
+// Assuming CONSTITUTION_ELEMENT_CASE_DATA exists and is correctly configured:
+// import { CONSTITUTION_ELEMENT_CASE_DATA } from '../../utils/samples';
+import './CaseNotesList.scss';
 
-const style = {
+// Inline styles for the modal
+const modalStyle = {
   position: 'absolute',
   width: '90%',
   maxWidth: 500,
   bgcolor: 'background.paper',
-  boxShadow: 18,
+  boxShadow: 24,
   bottom: 20,
   right: 20,
   display: 'grid',
@@ -42,7 +45,27 @@ const style = {
   },
 };
 
-const CaseNotesElementListModel = ({ open, title, handleClose, handleElementItemCheck }) =>  {
+// Styled component for the list with custom scrollbar
+const CustomList = muiStyled(List)({
+  width: '100%',
+  height: '100%',
+  overflowY: 'auto',
+  '&::-webkit-scrollbar': {
+    width: '0.4em',
+  },
+  '&::-webkit-scrollbar-track': {
+    background: '#f1f1f1',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#888',
+    borderRadius: '6px',
+  },
+  '&::-webkit-scrollbar-thumb:hover': {
+    background: '#555',
+  },
+});
+
+const CaseNotesElementListModel = ({ open, title, handleClose, handleElementItemCheck }) => {
   // const [constituteElementData, setConstituteElementData] = React.useState(CONSTITUTION_ELEMENT_CASE_DATA);
 
   return (
@@ -54,7 +77,7 @@ const CaseNotesElementListModel = ({ open, title, handleClose, handleElementItem
       aria-describedby="modal-description"
     >
       <Fade in={open}>
-        <Box sx={style}>
+        <Box sx={modalStyle}>
           <CaseNotesContainerTop>
             <Title id="modal-title">
               {title}
@@ -62,7 +85,7 @@ const CaseNotesElementListModel = ({ open, title, handleClose, handleElementItem
             <Close onClick={handleClose} style={{ cursor: 'pointer' }} />
           </CaseNotesContainerTop>
           <ListContainer>
-            <List sx={{ width: '100%', height: '100%', overflowY: 'scroll', scrollbarWidth: 'none' }}>
+            <CustomList>
               {/* {constituteElementData.map((data) => (
                 <ListItem key={data.id}>
                   <ListItemIcon>
@@ -77,10 +100,17 @@ const CaseNotesElementListModel = ({ open, title, handleClose, handleElementItem
                   </ListItemText>
                 </ListItem>
               ))} */}
-            </List>
+            </CustomList>
           </ListContainer>
           <CaseNotesContainerBottom>
-            <Button size="small" variant="outlined" sx={{ textTransform: 'none' }} onClick={handleClose}>Back</Button>
+            <Button 
+              size="small" 
+              variant="outlined" 
+              sx={{ textTransform: 'none' }} 
+              onClick={handleClose}
+            >
+              Back
+            </Button>
           </CaseNotesContainerBottom>
         </Box>
       </Fade>

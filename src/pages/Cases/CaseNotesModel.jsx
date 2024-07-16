@@ -7,6 +7,7 @@ import {
   Button, 
   TextField
 } from '@mui/material';
+import { Close, Info } from '@mui/icons-material';
 import { 
   CaseNotesContainerTop, 
   CaseNotesContainerBottom, 
@@ -16,10 +17,9 @@ import {
   InfoText, 
   Title 
 } from './style';
-import { Close, Info } from '@mui/icons-material';
 import './CaseNotesModel.scss';
 
-const style = {
+const modalStyle = {
   position: 'absolute',
   width: '90%',
   maxWidth: 500,
@@ -34,11 +34,12 @@ const style = {
   transition: 'all 0.3s ease',
 };
 
-const CaseNotesModel = ({ open, handleClose, handleElementList, handleSubmit }) =>  {
+const CaseNotesModel = ({ open, handleClose, handleElementList, handleSubmit }) => {
   const [note, setNote] = useState("");
 
   const submitCaseNote = () => {
     handleSubmit(note);
+    setNote(""); // Clear the input field after submission
   };
 
   return (
@@ -50,7 +51,7 @@ const CaseNotesModel = ({ open, handleClose, handleElementList, handleSubmit }) 
       aria-describedby="case-notes-description"
     >
       <Fade in={open}>
-        <Box sx={style}>
+        <Box sx={modalStyle}>
           <CaseNotesContainerTop>
             <Title id="case-notes-title">
               Case Notes
@@ -78,6 +79,7 @@ const CaseNotesModel = ({ open, handleClose, handleElementList, handleSubmit }) 
               multiline
               rows={8}
               fullWidth
+              value={note}
               onChange={(event) => setNote(event.target.value)}
             />
           </InfoAndTypeContainer>
@@ -89,7 +91,13 @@ const CaseNotesModel = ({ open, handleClose, handleElementList, handleSubmit }) 
             >
               View Constituent Elements List
             </ViewElementListText>
-            <Button size="small" variant="contained" sx={{ textTransform: 'none' }} onClick={submitCaseNote}>
+            <Button 
+              size="small" 
+              variant="contained"
+              sx={{ textTransform: 'none' }} 
+              onClick={submitCaseNote}
+              disabled={!note.trim()} // Disable button if input is empty
+            >
               Done
             </Button>
           </CaseNotesContainerBottom>

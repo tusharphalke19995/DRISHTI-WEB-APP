@@ -1,19 +1,47 @@
-.tag{
-    color: gray;
+.custom-container {
+  padding: 10px 20px;
+  background-color: #f5f5f5;
+
+  .header-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 10px 0;
   }
-  
-  .add-note{
-    background-color: white !important;
-    border: 1px solid #007E7E !important;
-    color: #007E7E !important;
-    box-shadow: none !important
+
+  .case-title-box {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .case-title {
+          font-weight: 500;
+      }
+
+      .case-id, 
+      .case-status {
+          color: #757575;
+          margin-left: 10px;
+      }
   }
-  
-  .more-vert{
-    background-color: white !important;
-    border: 1px solid #007E7E !important;
-    color: #007E7E !important;
-    margin: 5px;
-    cursor: pointer;
-    height: 100%;
+
+  .action-buttons-box {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+
+      .action-button {
+          margin-bottom: 10px;
+
+          &:last-child {
+              margin-bottom: 0;
+          }
+      }
   }
+}
+
+
+::ng-deep.custom-container .action-buttons-box .action-button:last-child {
+    margin-bottom: 1px !important ;
+}
