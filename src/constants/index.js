@@ -1,3 +1,1 @@
-export const queryKeys = Object.freeze({
-
-});
+export const BASE_URL = "http://localhost:8080/api";

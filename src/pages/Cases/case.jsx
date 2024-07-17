@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, memo, useContext, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux'
 import { 
     Box, 
     Menu, 
@@ -9,7 +10,6 @@ import {
     Grid,
     IconButton,
 } from '@mui/material';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import EditIcon from '@mui/icons-material/Edit';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -23,13 +23,18 @@ import CaseNotesModel from './CaseNotesModel.jsx';
 import CaseNotesElementListModel from './CaseNotesList';
 
 import './case.scss';
+import { useCallback } from 'react';
+import axios from 'axios';
+import { BASE_URL } from '../../constants/index.js';
+import { addNote, fetchNotes } from '../../redux/slice/noteSlice.js';
+import { fetchElement } from '../../redux/slice/elementSlice.js';
+import { subscribe, unsubscribe } from './event.js';
 
 // Contexts
 const AlertsContext = createContext({ alertInfo: { open: false }, setAlertInfo: () => {} });
 
 // Custom Hook to use alert messages
 const useAlertMessages = () => useContext(AlertsContext);
-
 // Styled Menu Component
 const StyledMenu = styled((props) => (
     <Menu
@@ -64,13 +69,16 @@ const StyledMenu = styled((props) => (
     },
 }));
 
-const Case = () => {
+const Case = memo(({caseId = 1 }) => {
+    const dispatch = useDispatch();
+
     const [alertInfo, setAlertInfo] = useState({
         open: false,
         severity: "success",
         message: "",
     });
-    const [caseNotes, setCaseNotes] = useState([]);
+
+    const [note, setNote] = useState(null)
     const [isCaseNoteOpen, setIsCaseNoteOpen] = useState(false);
     const [isElementListOpen, setIsElementListOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -81,22 +89,32 @@ const Case = () => {
     const handleMenuClick = (event) => setAnchorEl(event.currentTarget);
     const handleMenuClose = () => setAnchorEl(null);
 
-    const submitCaseNote = (notes) => {
-        if (notes) {
+    useEffect(() => {
+        dispatch(fetchNotes())
+        dispatch(fetchElement(caseId))
+    }, [dispatch, caseId])
+
+
+    useEffect(() => {
+        subscribe("noteForEdit", handleCardItemClick)
+
+        return(() => {
+            unsubscribe("noteForEdit", handleCardItemClick)
+        })
+    }, [])
+
+    const submitCaseNote = (note) => {
+        if (note) {
             const newNote = {
-                id: uuidv4(),  // Ensure this import if needed
-                notes,
-                createdAt: new Date(),
-                submittedBy: "User on behalf of Judge",
-                constituents: constituteItemsChecked,
+                note: note,
+                caseId: caseId,
+                submittedBy: 1,
+                constituteElements: constituteItemsChecked,
             };
-            setCaseNotes([...caseNotes, newNote]);
+
             setIsCaseNoteOpen(false);
-            setAlertInfo({
-                message: "Case notes uploaded successfully",
-                severity: "success",
-                open: true,
-            });
+
+            dispatch(addNote(newNote));
         } else {
             setAlertInfo({
                 message: "Case notes are required.",
@@ -106,12 +124,24 @@ const Case = () => {
         }
     };
 
-    const handleElementItemCheck = (e) => {
+    const handleElementItemCheck = useCallback((e) => {
         const { id, checked } = e.target;
+
         setConstituteItemsChecked((prev) =>
-            checked ? [...prev, id] : prev.filter((item) => item !== id)
+            checked ? [...prev, parseInt(id)] : prev.filter((item) => item !== id)
         );
-    };
+    }, [constituteItemsChecked]);
+
+    const handleCardItemClick = (e) => {
+        const { note, isNoteForEdit } = e.detail
+        console.log("handleCardItemClick", isNoteForEdit, note)
+        // index 3 for notes
+        if(isNoteForEdit && note) {
+            setNote(note)
+            setIsCaseNoteOpen(true)
+            setConstituteItemsChecked(note.constituteElements)
+        }
+    }
 
     return (
         <AlertsContext.Provider value={{ alertInfo, setAlertInfo }}>
@@ -180,13 +210,15 @@ const Case = () => {
                 </Grid>
                 <CaseNotesModel
                     open={isCaseNoteOpen}
+                    noteData={note}
                     handleClose={() => setIsCaseNoteOpen(false)}
                     handleSubmit={submitCaseNote}
                     handleElementList={() => setIsElementListOpen(true)}
                 />
                 <CaseNotesElementListModel
                     open={isElementListOpen}
-                    title="Constituent Elements for NIA138 Cases"
+                    constituteItemsChecked={constituteItemsChecked}
+                    title={"Constituent Elements for NIA138 Cases"}
                     handleElementItemCheck={handleElementItemCheck}
                     handleClose={() => setIsElementListOpen(false)}
                 />
@@ -194,6 +226,6 @@ const Case = () => {
             </Box>
         </AlertsContext.Provider>
     );
-};
+});
 
 export default Case;

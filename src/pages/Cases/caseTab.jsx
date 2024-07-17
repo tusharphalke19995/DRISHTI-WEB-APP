@@ -1,10 +1,13 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Tabs, Tab, Box, Button, Card, CardContent, Typography, Grid, Chip, IconButton } from '@mui/material';
-import { SkipPrevious as SkipPreviousIcon, SkipNext as SkipNextIcon, PlayArrow as PlayArrowIcon } from '@mui/icons-material';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import './castab.scss';
 
-function CustomTabPanel(props) {
+import moment from 'moment/moment';
+import { publish } from './event';
+
+const CustomTabPanel = memo((props) => {
   const { children, value, index, ...other } = props;
 
   return (
@@ -18,7 +21,7 @@ function CustomTabPanel(props) {
       {value === index && <Box className="tab-content">{children}</Box>}
     </div>
   );
-}
+})
 
 function a11yProps(index) {
   return {
@@ -28,11 +31,13 @@ function a11yProps(index) {
 }
 
 const CaseTab = memo(function CaseTab() {
-  const [value, setValue] = useState(0);
+  const notes = useSelector((state) => state.note.notes);
 
-  const handleChange = (event, newValue) => {
+  const [value, setValue] = useState(3);
+
+  const handleChange = useCallback((_event, newValue) => {
     setValue(newValue);
-  };
+  }, [value]);
 
   return (
     <Box className="case-tabs-wrapper">
@@ -60,21 +65,21 @@ const CaseTab = memo(function CaseTab() {
         <TabContent title="Hearings To Review(6)" items={[1, 2, 3]} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
-        <TabContent title="Submissions To Review" items={[1, 2, 3, 4]} />
+        <TabContent title="Submissions To Review" items={notes} />
       </CustomTabPanel>
     </Box>
   );
 });
 
-const TabContent = ({ title, items }) => (
+const TabContent = memo(({ title, items }) => (
   <Box sx={{ padding: 2 }}>
     <Grid container spacing={2}>
       <Grid item xs={12} md={12}>
-        <Typography variant="h6" sx={{ fontWeight: 'medium' }}>{title}</Typography>
+        <Typography variant="h6" sx={{ fontWeight: 'medium' }}>{`${title} (${items.length || 0})`}</Typography>
       </Grid>
       
 
-      {items.map((item) => (
+      {items && items.map((item) => (
         <Grid item xs={12} sm={6} md={4} key={item}>
           <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 0 auto', justifyContent: 'space-between' }}>
@@ -83,17 +88,20 @@ const TabContent = ({ title, items }) => (
               
                 <Box sx={{ ml: 1, flex: 1 }}>
                   <Chip label="Affidavit" className="chip" />
-                  <IconButton sx={{  float:'right' }}>
+                  <IconButton onClick={() => {
+                      console.log("TabContent", item)
+                      publish("noteForEdit", { note: item, isNoteForEdit: true})}
+                    } sx={{  float:'right' }}>
                   <ArrowOutwardIcon />
                 </IconButton>
                   <Typography variant="subtitle1" color="text.secondary">
-                    Proof of Response to Demand Notice
+                    {item.note}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    <strong>Submitted By:</strong> Diwakar on behalf of Aparna
+                    <strong>Submitted By:</strong> {item.submittedBy || "satish on behalf of judge"}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    <strong>Date:</strong> 23 March 2024
+                    <strong>Date:</strong> {moment(item.createdDate || new Date()).format('DD MMM YYYY')}
                   </Typography>
                 </Box>
               </CardContent>
@@ -103,6 +111,6 @@ const TabContent = ({ title, items }) => (
       ))}
     </Grid>
   </Box>
-);
+));
 
 export default CaseTab;

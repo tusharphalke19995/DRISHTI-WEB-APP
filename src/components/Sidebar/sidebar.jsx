@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import classes from "./sidebar.module.scss";
 import {
+  Box,
   Collapse,
   List,
   ListItem,
@@ -9,17 +10,18 @@ import {
   ListItemText,
   useMediaQuery,
 } from "@mui/material";
+
+import { 
+  Dashboard,
+  RamenDining,
+  ArrowBack
+} from '@mui/icons-material'
 import { useLocation, useNavigate } from "react-router-dom";
 
 import Logo from "../../../src/assets/logobase.svg";
-import LogoutIcon from "@mui/icons-material/Logout";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-
-import RamenDiningIcon from "@mui/icons-material/RamenDining";
 
 import classNames from "classnames";
 
-import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
 import { useTheme } from "@emotion/react";
 const listButtonStyle = {
   minWidth: "26px",
@@ -98,7 +100,7 @@ const Sidebar = (handleSidebarOpen) => {
       <div>
         {smScreen && (
           <Box className={classes.backIconContainer}>
-            <ArrowBackIcon onClick={handleSidebarOpen} />
+            <ArrowBack onClick={handleSidebarOpen} />
           </Box>
         )}
         <List sx={{ paddingTop: "12px" }}>
@@ -111,11 +113,7 @@ const Sidebar = (handleSidebarOpen) => {
             >
               <ListItemIcon sx={listButtonStyle}>
                 <div>
-                  {getActiveListItem("home") ? (
-                    <DashboardIcon />
-                  ) : (
-                    <DashboardIcon />
-                  )}
+                  <Dashboard />
                 </div>
               </ListItemIcon>
               <ListItemText
@@ -141,11 +139,7 @@ const Sidebar = (handleSidebarOpen) => {
             >
               <ListItemIcon sx={listButtonStyle}>
                 <div>
-                  {getActiveListItem("case") ? (
-                    <RamenDiningIcon />
-                  ) : (
-                    <RamenDiningIcon />
-                  )}
+                  <RamenDining />
                 </div>
               </ListItemIcon>
               <ListItemText

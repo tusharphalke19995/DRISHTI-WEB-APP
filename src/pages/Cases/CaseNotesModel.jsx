@@ -34,8 +34,8 @@ const modalStyle = {
   transition: 'all 0.3s ease',
 };
 
-const CaseNotesModel = ({ open, handleClose, handleElementList, handleSubmit }) => {
-  const [note, setNote] = useState("");
+const CaseNotesModel = ({ open, noteData, handleClose, handleElementList, handleSubmit }) => {
+  const [note, setNote] = useState(noteData.note || "");
 
   const submitCaseNote = () => {
     handleSubmit(note);

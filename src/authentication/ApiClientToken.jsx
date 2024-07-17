@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const authToken = sessionStorage.getItem('access-token');
 const axiosInstanceToken = axios.create({
-    baseURL: "http://localhost:8976/",
+  baseURL: "http://localhost:8080/",
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',

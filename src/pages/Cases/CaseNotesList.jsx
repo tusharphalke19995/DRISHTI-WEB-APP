@@ -1,8 +1,9 @@
-import React from 'react';
-import { 
-  Box, 
-  Modal, 
-  Fade, 
+import React, { useCallback, useEffect, useState, memo } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  Box,
+  Modal,
+  Fade,
   Button,
   List,
   ListItem,
@@ -13,16 +14,18 @@ import {
 } from '@mui/material';
 import { Close, Check as CheckIcon } from '@mui/icons-material';
 // Assuming these styled components exist and are correctly configured:
-import { 
-  CaseNotesContainerTop, 
-  CaseNotesContainerBottom, 
+import {
+  CaseNotesContainerTop,
+  CaseNotesContainerBottom,
   ListItemText,
   ListContainer,
-  Title 
-} from './style'; 
+  Title
+} from './style';
 // Assuming CONSTITUTION_ELEMENT_CASE_DATA exists and is correctly configured:
 // import { CONSTITUTION_ELEMENT_CASE_DATA } from '../../utils/samples';
 import './CaseNotesList.scss';
+import { BASE_URL } from '../../constants';
+import { fetchElement } from '../../redux/slice/elementSlice';
 
 // Inline styles for the modal
 const modalStyle = {
@@ -65,8 +68,9 @@ const CustomList = muiStyled(List)({
   },
 });
 
-const CaseNotesElementListModel = ({ open, title, handleClose, handleElementItemCheck }) => {
-  // const [constituteElementData, setConstituteElementData] = React.useState(CONSTITUTION_ELEMENT_CASE_DATA);
+const CaseNotesElementListModel = memo(({ open, title, constituteItemsChecked, handleClose, handleElementItemCheck }) => {
+
+  const elements = useSelector((state) => state.element.elements)
 
   return (
     <Modal
@@ -86,27 +90,28 @@ const CaseNotesElementListModel = ({ open, title, handleClose, handleElementItem
           </CaseNotesContainerTop>
           <ListContainer>
             <CustomList>
-              {/* {constituteElementData.map((data) => (
-                <ListItem key={data.id}>
+              {elements.map((data) => (
+                <ListItem key={data.id.toString()}>
                   <ListItemIcon>
                     <Checkbox
-                      id={data.id}
-                      icon={<CheckIcon sx={{ color: '#3D3C3C' }} />}
+                      id={data.id.toString()}
+                      checked={constituteItemsChecked.includes(data.id)}
+                      checkedIcon={<CheckIcon sx={{ color: '#3D3C3C' }} />}
                       onChange={handleElementItemCheck}
                     />
                   </ListItemIcon>
                   <ListItemText>
-                    <Typography variant="body2">{data.item}</Typography>
+                    <Typography variant="body2">{data.element}</Typography>
                   </ListItemText>
                 </ListItem>
-              ))} */}
+              ))}
             </CustomList>
           </ListContainer>
           <CaseNotesContainerBottom>
-            <Button 
-              size="small" 
-              variant="outlined" 
-              sx={{ textTransform: 'none' }} 
+            <Button
+              size="small"
+              variant="outlined"
+              sx={{ textTransform: 'none' }}
               onClick={handleClose}
             >
               Back
@@ -116,6 +121,6 @@ const CaseNotesElementListModel = ({ open, title, handleClose, handleElementItem
       </Fade>
     </Modal>
   );
-};
+});
 
 export default CaseNotesElementListModel;
