@@ -90,7 +90,7 @@ const TabContent = memo(({ title, items }) => (
                   <Chip label="Affidavit" className="chip" />
                   <IconButton onClick={() => {
                       console.log("TabContent", item)
-                      publish("noteForEdit", { note: item, isNoteForEdit: true})}
+                      publish("noteForEdit", { noteData: item, isNoteForEdit: true})}
                     } sx={{  float:'right' }}>
                   <ArrowOutwardIcon />
                 </IconButton>

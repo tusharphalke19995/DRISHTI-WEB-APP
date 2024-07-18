@@ -24,11 +24,9 @@ import CaseNotesElementListModel from './CaseNotesList';
 
 import './case.scss';
 import { useCallback } from 'react';
-import axios from 'axios';
-import { BASE_URL } from '../../constants/index.js';
-import { addNote, fetchNotes } from '../../redux/slice/noteSlice.js';
-import { fetchElement } from '../../redux/slice/elementSlice.js';
+import { addNote, fetchNotes, updateNote } from '../../redux/slice/noteSlice.js';
 import { subscribe, unsubscribe } from './event.js';
+import { fetchElement } from '../../redux/slice/elementSlice.js';
 
 // Contexts
 const AlertsContext = createContext({ alertInfo: { open: false }, setAlertInfo: () => {} });
@@ -78,7 +76,7 @@ const Case = memo(({caseId = 1 }) => {
         message: "",
     });
 
-    const [note, setNote] = useState(null)
+    const [noteValue, setNoteValue] = useState("")
     const [isCaseNoteOpen, setIsCaseNoteOpen] = useState(false);
     const [isElementListOpen, setIsElementListOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -103,18 +101,19 @@ const Case = memo(({caseId = 1 }) => {
         })
     }, [])
 
-    const submitCaseNote = (note) => {
-        if (note) {
-            const newNote = {
-                note: note,
+    const submitCaseNote = (newNote) => {
+        if (newNote) {
+            const newNoteData = {
+                note: newNote,
                 caseId: caseId,
                 submittedBy: 1,
                 constituteElements: constituteItemsChecked,
             };
 
             setIsCaseNoteOpen(false);
+            setNoteValue("")
 
-            dispatch(addNote(newNote));
+            dispatch(updateNote(caseId, newNoteData));
         } else {
             setAlertInfo({
                 message: "Case notes are required.",
@@ -133,13 +132,13 @@ const Case = memo(({caseId = 1 }) => {
     }, [constituteItemsChecked]);
 
     const handleCardItemClick = (e) => {
-        const { note, isNoteForEdit } = e.detail
+        const { noteData, isNoteForEdit } = e.detail
+        const { note, constituteElements } = noteData;
         console.log("handleCardItemClick", isNoteForEdit, note)
-        // index 3 for notes
         if(isNoteForEdit && note) {
-            setNote(note)
+            setNoteValue(note)
+            setConstituteItemsChecked(constituteElements || [])
             setIsCaseNoteOpen(true)
-            setConstituteItemsChecked(note.constituteElements)
         }
     }
 
@@ -210,7 +209,7 @@ const Case = memo(({caseId = 1 }) => {
                 </Grid>
                 <CaseNotesModel
                     open={isCaseNoteOpen}
-                    noteData={note}
+                    noteData={noteValue}
                     handleClose={() => setIsCaseNoteOpen(false)}
                     handleSubmit={submitCaseNote}
                     handleElementList={() => setIsElementListOpen(true)}

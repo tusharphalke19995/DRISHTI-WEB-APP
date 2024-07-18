@@ -24,6 +24,15 @@ export const fetchNotes = createAsyncThunk(
     }
   )
 
+  export const updateNote = createAsyncThunk(
+    'note/updateNote',
+    async(caseId, note) => {
+      const res = await axios.put(`${BASE_URL}/notes/${caseId}`, note)
+      console.log("updateNote res", res)
+      return res.data
+    }
+  )
+
   export const noteSlice = createSlice({
     name: 'note',
     initialState,
@@ -48,6 +57,24 @@ export const fetchNotes = createAsyncThunk(
         state.notes.push(action.payload)
       })
       builder.addCase(addNote.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.error.message
+      })
+      builder.addCase(updateNote.pending, (state) => {
+        state.isLoading = true
+      })
+      builder.addCase(updateNote.fulfilled, (state, action) => {
+        state.isLoading = false
+        // update existing note
+        const payloadId = action.payload.id
+        console.log("updateNote: ", state.notes, action.payload)
+        let objectIndex = state.notes.findIndex(obj => obj.id === payloadId)
+        console.log("objectIndex: ", objectIndex, payloadId)
+        console.log("Before update: ", state.notes[objectIndex])
+        state.notes[objectIndex] = action.payload
+        console.log("After update: ", state.notes[objectIndex])
+      })
+      builder.addCase(updateNote.rejected, (state, action) => {
         state.isLoading = false
         state.error = action.error.message
       })

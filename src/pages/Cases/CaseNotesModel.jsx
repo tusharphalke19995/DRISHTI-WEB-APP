@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { 
   Box, 
   Modal, 
@@ -34,8 +34,11 @@ const modalStyle = {
   transition: 'all 0.3s ease',
 };
 
-const CaseNotesModel = ({ open, noteData, handleClose, handleElementList, handleSubmit }) => {
-  const [note, setNote] = useState(noteData ? noteData.note : "");
+const CaseNotesModel = memo(({ open, noteData, handleClose, handleElementList, handleSubmit }) => {
+  
+  const [note, setNote] = useState(noteData);
+
+  console.log(note, noteData)
 
   const submitCaseNote = () => {
     handleSubmit(note);
@@ -105,6 +108,6 @@ const CaseNotesModel = ({ open, noteData, handleClose, handleElementList, handle
       </Fade>
     </Modal>
   );
-};
+});
 
 export default CaseNotesModel;
