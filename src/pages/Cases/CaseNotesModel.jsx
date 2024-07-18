@@ -35,7 +35,7 @@ const modalStyle = {
 };
 
 const CaseNotesModel = ({ open, noteData, handleClose, handleElementList, handleSubmit }) => {
-  const [note, setNote] = useState(noteData.note || "");
+  const [note, setNote] = useState(noteData ? noteData.note : "");
 
   const submitCaseNote = () => {
     handleSubmit(note);
