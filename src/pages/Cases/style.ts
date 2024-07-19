@@ -2,7 +2,6 @@ import { Box, TextField, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 
 export const CaseNotesContainerTop = styled(Box)`
-  width: 100%;
   padding: 16px 24px;
   display: flex;
   align-items: center;
@@ -18,11 +17,10 @@ export const Title = styled(Typography)`
 `;
 
 export const CaseNotesContainerBottom = styled(Box)`
-  width: 100%;
-  height: 60px;
   padding: 16px 24px;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   border-top: 1px solid #e8e8e8;
 `;
 

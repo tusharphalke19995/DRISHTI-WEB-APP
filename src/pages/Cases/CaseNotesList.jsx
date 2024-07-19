@@ -21,11 +21,7 @@ import {
   ListContainer,
   Title
 } from './style';
-// Assuming CONSTITUTION_ELEMENT_CASE_DATA exists and is correctly configured:
-// import { CONSTITUTION_ELEMENT_CASE_DATA } from '../../utils/samples';
 import './CaseNotesList.scss';
-import { BASE_URL } from '../../constants';
-import { fetchElement } from '../../redux/slice/elementSlice';
 
 // Inline styles for the modal
 const modalStyle = {

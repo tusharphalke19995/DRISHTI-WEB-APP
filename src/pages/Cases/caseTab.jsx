@@ -62,7 +62,7 @@ const CaseTab = memo(function CaseTab() {
         <TabContent title="Case File" items={[1, 2]} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <TabContent title="Hearings To Review(6)" items={[1, 2, 3]} />
+        <TabContent title="Hearings To Review" items={[1, 2, 3]} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
         <TabContent title="Submissions To Review" items={notes} />

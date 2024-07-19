@@ -76,7 +76,7 @@ const Case = memo(({caseId = 1 }) => {
         message: "",
     });
 
-    const [noteValue, setNoteValue] = useState("")
+    const [noteData, setNoteData] = useState(null)
     const [isCaseNoteOpen, setIsCaseNoteOpen] = useState(false);
     const [isElementListOpen, setIsElementListOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -101,7 +101,7 @@ const Case = memo(({caseId = 1 }) => {
         })
     }, [])
 
-    const submitCaseNote = (newNote) => {
+    const submitCaseNote = (isNoteForEdit, newNote) => {
         if (newNote) {
             const newNoteData = {
                 note: newNote,
@@ -110,10 +110,15 @@ const Case = memo(({caseId = 1 }) => {
                 constituteElements: constituteItemsChecked,
             };
 
-            setIsCaseNoteOpen(false);
-            setNoteValue("")
+            let editNoteId = isNoteForEdit && noteData.id
 
-            dispatch(updateNote(caseId, newNoteData));
+            isNoteForEdit 
+                ? dispatch(updateNote({noteId: editNoteId, edditedNote: newNoteData}))
+                : dispatch(addNote(newNoteData))
+
+            setIsCaseNoteOpen(false)
+            setConstituteItemsChecked([])
+            setNoteData(null)    
         } else {
             setAlertInfo({
                 message: "Case notes are required.",
@@ -133,11 +138,10 @@ const Case = memo(({caseId = 1 }) => {
 
     const handleCardItemClick = (e) => {
         const { noteData, isNoteForEdit } = e.detail
-        const { note, constituteElements } = noteData;
-        console.log("handleCardItemClick", isNoteForEdit, note)
-        if(isNoteForEdit && note) {
-            setNoteValue(note)
-            setConstituteItemsChecked(constituteElements || [])
+
+        if(isNoteForEdit && noteData) {
+            setNoteData(noteData)
+            setConstituteItemsChecked(noteData.constituteElements || [])
             setIsCaseNoteOpen(true)
         }
     }
@@ -209,7 +213,7 @@ const Case = memo(({caseId = 1 }) => {
                 </Grid>
                 <CaseNotesModel
                     open={isCaseNoteOpen}
-                    noteData={noteValue}
+                    noteData={noteData}
                     handleClose={() => setIsCaseNoteOpen(false)}
                     handleSubmit={submitCaseNote}
                     handleElementList={() => setIsElementListOpen(true)}

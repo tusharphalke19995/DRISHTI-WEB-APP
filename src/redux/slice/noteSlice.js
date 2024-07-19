@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { BASE_URL } from '../../constants'
+import { BASE_URL, NOTES } from '../../constants'
 
 const initialState = {
     notes: [],
@@ -19,16 +19,16 @@ export const fetchNotes = createAsyncThunk(
   export const addNote = createAsyncThunk(
     'note/addNote',
     async(note) => {
-      const res = await axios.post(`${BASE_URL}/notes`, note)
+      const res = await axios.post(`${BASE_URL}${NOTES}`, note)
       return res.data
     }
   )
 
   export const updateNote = createAsyncThunk(
     'note/updateNote',
-    async(caseId, note) => {
-      const res = await axios.put(`${BASE_URL}/notes/${caseId}`, note)
-      console.log("updateNote res", res)
+    async(request) => {
+      const { noteId, edditedNote} = request
+      const res = await axios.put(`${BASE_URL}${NOTES}/${noteId}`, edditedNote)
       return res.data
     }
   )
@@ -67,10 +67,7 @@ export const fetchNotes = createAsyncThunk(
         state.isLoading = false
         // update existing note
         const payloadId = action.payload.id
-        console.log("updateNote: ", state.notes, action.payload)
         let objectIndex = state.notes.findIndex(obj => obj.id === payloadId)
-        console.log("objectIndex: ", objectIndex, payloadId)
-        console.log("Before update: ", state.notes[objectIndex])
         state.notes[objectIndex] = action.payload
         console.log("After update: ", state.notes[objectIndex])
       })

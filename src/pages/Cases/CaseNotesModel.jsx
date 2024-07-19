@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { 
   Box, 
   Modal, 
@@ -36,12 +36,17 @@ const modalStyle = {
 
 const CaseNotesModel = memo(({ open, noteData, handleClose, handleElementList, handleSubmit }) => {
   
-  const [note, setNote] = useState(noteData);
+  const [note, setNote] = useState("");
 
-  console.log(note, noteData)
+  useEffect(() => {
+    if(noteData?.note) {
+      setNote(noteData.note)
+    }
+  }, [noteData])
 
   const submitCaseNote = () => {
-    handleSubmit(note);
+    let isNoteForEdit = noteData ? true : false
+    handleSubmit(isNoteForEdit,  note);
     setNote(""); // Clear the input field after submission
   };
 
@@ -63,7 +68,7 @@ const CaseNotesModel = memo(({ open, noteData, handleClose, handleElementList, h
           </CaseNotesContainerTop>
           <InfoAndTypeContainer>
             <InfoContainer>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <Info style={{ color: '#0F3B8C', marginRight: 8 }} />
                 <InfoText variant="subtitle1" sx={{ color: '#0A0A0A' }}>
                   Info
@@ -95,7 +100,7 @@ const CaseNotesModel = memo(({ open, noteData, handleClose, handleElementList, h
               View Constituent Elements List
             </ViewElementListText>
             <Button 
-              size="small" 
+              size="medium" 
               variant="contained"
               sx={{ textTransform: 'none' }} 
               onClick={submitCaseNote}
