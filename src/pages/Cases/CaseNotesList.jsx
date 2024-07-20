@@ -87,17 +87,17 @@ const CaseNotesElementListModel = memo(({ open, title, constituteItemsChecked, h
           <ListContainer>
             <CustomList>
               {elements.map((data) => (
-                <ListItem key={data.id.toString()}>
+                <ListItem key={data.id}>
                   <ListItemIcon>
                     <Checkbox
-                      id={data.id.toString()}
+                      id={data.id}
                       checked={constituteItemsChecked.includes(data.id)}
                       checkedIcon={<CheckIcon sx={{ color: '#3D3C3C' }} />}
                       onChange={handleElementItemCheck}
                     />
                   </ListItemIcon>
                   <ListItemText>
-                    <Typography variant="body2">{data.element}</Typography>
+                    <Typography variant="body2">{data.value}</Typography>
                   </ListItemText>
                 </ListItem>
               ))}

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { BASE_URL } from '../../constants'
+import { ELEMENT_API } from '../../constants'
 
 const initialState = {
     elements: [],
@@ -11,7 +11,7 @@ const initialState = {
 export const fetchElement = createAsyncThunk(
     'element/fetchElement',
     async (caseId) => {
-      const res = await axios(`${BASE_URL}/element/list/${caseId}`)
+      const res = await axios(`${ELEMENT_API}/v1/getAll/${caseId}`)
       return res.data
     }
   )

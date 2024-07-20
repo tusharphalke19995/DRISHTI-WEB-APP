@@ -67,7 +67,7 @@ const StyledMenu = styled((props) => (
     },
 }));
 
-const Case = memo(({caseId = 1 }) => {
+const Case = memo(({caseId = "82c292bc22804f13995dfab40c60c9be" }) => {
     const dispatch = useDispatch();
 
     const [alertInfo, setAlertInfo] = useState({
@@ -88,7 +88,7 @@ const Case = memo(({caseId = 1 }) => {
     const handleMenuClose = () => setAnchorEl(null);
 
     useEffect(() => {
-        dispatch(fetchNotes())
+        dispatch(fetchNotes(caseId))
         dispatch(fetchElement(caseId))
     }, [dispatch, caseId])
 
@@ -106,11 +106,13 @@ const Case = memo(({caseId = 1 }) => {
             const newNoteData = {
                 note: newNote,
                 caseId: caseId,
-                submittedBy: 1,
+                submittedBy: "04ef1d73f1824cd4b1609f3f8255e136",
                 constituteElements: constituteItemsChecked,
             };
 
             let editNoteId = isNoteForEdit && noteData.id
+
+            console.log("submitCaseNote", newNoteData)
 
             isNoteForEdit 
                 ? dispatch(updateNote({noteId: editNoteId, edditedNote: newNoteData}))
@@ -131,13 +133,17 @@ const Case = memo(({caseId = 1 }) => {
     const handleElementItemCheck = useCallback((e) => {
         const { id, checked } = e.target;
 
+        console.log("handleElementItemCheck", id, checked, constituteItemsChecked)
+
         setConstituteItemsChecked((prev) =>
-            checked ? [...prev, parseInt(id)] : prev.filter((item) => item !== id)
+            checked ? [...prev, id] : prev.filter((item) => item !== id)
         );
     }, [constituteItemsChecked]);
 
     const handleCardItemClick = (e) => {
         const { noteData, isNoteForEdit } = e.detail
+
+        console.log("handleCardItemClick", noteData)
 
         if(isNoteForEdit && noteData) {
             setNoteData(noteData)

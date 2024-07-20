@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { BASE_URL, NOTES } from '../../constants'
+import { NOTES_API } from '../../constants'
 
 const initialState = {
     notes: [],
@@ -10,8 +10,8 @@ const initialState = {
 
 export const fetchNotes = createAsyncThunk(
     'note/fetchNotes',
-    async () => {
-      const res = await axios.get(`${BASE_URL}/notes`)
+    async (caseId) => {
+      const res = await axios.get(`${NOTES_API}/v1/getAll/${caseId}`)
       return res.data
     }
   )
@@ -19,7 +19,7 @@ export const fetchNotes = createAsyncThunk(
   export const addNote = createAsyncThunk(
     'note/addNote',
     async(note) => {
-      const res = await axios.post(`${BASE_URL}${NOTES}`, note)
+      const res = await axios.post(`${NOTES_API}/v1/create`, note)
       return res.data
     }
   )
@@ -28,7 +28,7 @@ export const fetchNotes = createAsyncThunk(
     'note/updateNote',
     async(request) => {
       const { noteId, edditedNote} = request
-      const res = await axios.put(`${BASE_URL}${NOTES}/${noteId}`, edditedNote)
+      const res = await axios.put(`${NOTES_API}/v1/update/${noteId}`, edditedNote)
       return res.data
     }
   )
